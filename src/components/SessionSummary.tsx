@@ -1,6 +1,7 @@
 // Session Summary Screen - Celebration and achievements
 import { motion } from 'framer-motion';
 import { useAppStore } from '../store/useAppStore';
+import { useLanguage } from '../i18n/LanguageContext';
 import type { SessionData } from '../types';
 import { Trophy, Star, Music, Mic, Ear } from 'lucide-react';
 
@@ -16,6 +17,7 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
   onClose 
 }) => {
   const { profile } = useAppStore();
+  const { t } = useLanguage();
 
   const formatDuration = (ms: number) => {
     const minutes = Math.floor(ms / 60000);
@@ -51,9 +53,9 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
           >
             🎉
           </motion.div>
-          <h1 className="summary-title">Amazing Adventure!</h1>
+          <h1 className="summary-title">{t.summary.title}</h1>
           <p className="summary-subtitle">
-            Great job, <strong>{profile?.childName || 'Explorer'}</strong>!
+            {t.echo.amazing} <strong>{profile?.childName || 'Explorer'}</strong>!
           </p>
         </div>
 
@@ -67,7 +69,7 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
           >
             <Ear className="stat-icon" size={32} />
             <div className="stat-value">{session.soundsDiscovered.length}</div>
-            <div className="stat-label">Sounds Discovered</div>
+            <div className="stat-label">{t.summary.soundsFound}</div>
           </motion.div>
 
           <motion.div
@@ -78,7 +80,7 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
           >
             <Mic className="stat-icon" size={32} />
             <div className="stat-value">{session.soundsImitated.length}</div>
-            <div className="stat-label">Animals Imitated</div>
+            <div className="stat-label">{t.summary.animalsImitated}</div>
           </motion.div>
 
           <motion.div
@@ -89,7 +91,7 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
           >
             <Music className="stat-icon" size={32} />
             <div className="stat-value">{session.rhythmsCreated}</div>
-            <div className="stat-label">Rhythms Created</div>
+            <div className="stat-label">{t.summary.rhythmsCreated}</div>
           </motion.div>
         </div>
 
@@ -122,7 +124,7 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
             className="new-badges-section"
           >
             <h3 className="badges-title">
-              <Star size={24} /> New Badges Earned! <Star size={24} />
+              <Star size={24} /> {t.summary.newBadges}! <Star size={24} />
             </h3>
             <div className="badges-grid">
               {newBadges.map((badge, index) => (

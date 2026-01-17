@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { DISCOVERY_SOUNDS, ENCOURAGEMENTS, TRANSITION_PHRASES } from '../data/sounds';
 import { useAppStore } from '../store/useAppStore';
+import { useLanguage } from '../i18n/LanguageContext';
 import type { SoundItem } from '../types';
 
 interface DiscoveryPhaseProps {
@@ -14,6 +15,7 @@ export const DiscoveryPhase: React.FC<DiscoveryPhaseProps> = ({ onComplete }) =>
   const [isListening, setIsListening] = useState(false);
   const [discovered, setDiscovered] = useState<string[]>([]);
 
+  const { t, getSoundTranslation } = useLanguage();
   const { 
     setEchoMessage, 
     setEchoListening, 
@@ -24,7 +26,7 @@ export const DiscoveryPhase: React.FC<DiscoveryPhaseProps> = ({ onComplete }) =>
   } = useAppStore();
 
   useEffect(() => {
-    setActivity('Quiet Ears Expedition');
+    setActivity(t.phases.discovery.title);
     startDiscovery();
     
     return () => {
@@ -33,7 +35,7 @@ export const DiscoveryPhase: React.FC<DiscoveryPhaseProps> = ({ onComplete }) =>
   }, []);
 
   const startDiscovery = () => {
-    setEchoMessage("Let's hear what the world is whispering...");
+    setEchoMessage(t.echo.letsHear);
     setTimeout(() => {
       presentSound(0);
     }, 2000);
@@ -46,15 +48,16 @@ export const DiscoveryPhase: React.FC<DiscoveryPhaseProps> = ({ onComplete }) =>
     }
 
     const sound = DISCOVERY_SOUNDS[index];
+    const soundTrans = getSoundTranslation(sound.id);
     setCurrentSound(sound);
     setIsListening(true);
     setEchoListening(true);
     
-    setEchoMessage(`Listen carefully... Can you hear the ${sound.displayName}?`);
+    setEchoMessage(`${t.echo.listenCarefully} ${soundTrans.displayName}?`);
     
     // Simulate sound playing (in real app, would play actual sound)
     setTimeout(() => {
-      setEchoMessage(`That was the ${sound.displayName}! ${sound.description}`);
+      setEchoMessage(`${t.echo.thatWas} ${soundTrans.displayName}! ${soundTrans.description}`);
       setIsListening(false);
       setEchoListening(false);
       
@@ -94,9 +97,9 @@ export const DiscoveryPhase: React.FC<DiscoveryPhaseProps> = ({ onComplete }) =>
   return (
     <div className="discovery-phase">
       <div className="phase-header">
-        <h2 className="text-3xl font-bold text-safari-blue">🌿 Quiet Ears Expedition</h2>
+        <h2 className="text-3xl font-bold text-safari-blue">🌿 {t.phases.discovery.title}</h2>
         <div className="discovered-count">
-          <span className="text-xl">Sounds Discovered: {discovered.length}/{DISCOVERY_SOUNDS.length}</span>
+          <span className="text-xl">{t.phases.discovery.soundsDiscovered}: {discovered.length}/{DISCOVERY_SOUNDS.length}</span>
         </div>
       </div>
 
@@ -105,8 +108,8 @@ export const DiscoveryPhase: React.FC<DiscoveryPhaseProps> = ({ onComplete }) =>
           <div className={`sound-visual ${isListening ? 'listening' : ''}`}>
             {isListening ? '👂✨' : '🎵'}
           </div>
-          <h3 className="text-2xl mt-4">{currentSound.displayName}</h3>
-          <p className="text-lg text-gray-600">{currentSound.description}</p>
+          <h3 className="text-2xl mt-4">{getSoundTranslation(currentSound.id).displayName}</h3>
+          <p className="text-lg text-gray-600">{getSoundTranslation(currentSound.id).description}</p>
         </div>
       )}
 
@@ -115,7 +118,7 @@ export const DiscoveryPhase: React.FC<DiscoveryPhaseProps> = ({ onComplete }) =>
           const sound = DISCOVERY_SOUNDS.find(s => s.id === soundId);
           return (
             <div key={soundId} className="discovered-badge">
-              ✓ {sound?.displayName}
+              ✓ {sound ? getSoundTranslation(sound.id).displayName : soundId}
             </div>
           );
         })}

@@ -1,6 +1,7 @@
 // Parent Dashboard - Setup and monitoring interface
 import { useState } from 'react';
 import { useAppStore } from '../store/useAppStore';
+import { useLanguage } from '../i18n/LanguageContext';
 import { audioEngine } from '../engine/AudioEngine';
 import BadgeDisplay from './BadgeDisplay';
 import type { ComfortSound } from '../types';
@@ -8,6 +9,7 @@ import { Settings, Mic, Play, Trash2, BarChart3, Award } from 'lucide-react';
 
 export const ParentDashboard: React.FC = () => {
   const { profile, setProfile, addComfortSound } = useAppStore();
+  const { t } = useLanguage();
   const [childName, setChildName] = useState(profile?.childName || '');
   const [childAge, setChildAge] = useState(profile?.age || 36);
   const [isRecording, setIsRecording] = useState(false);
@@ -70,31 +72,31 @@ export const ParentDashboard: React.FC = () => {
   return (
     <div className="parent-dashboard">
       <div className="dashboard-header">
-        <h1 className="text-3xl font-bold">Parent Dashboard</h1>
+        <h1 className="text-3xl font-bold">{t.dashboard.title}</h1>
         <div className="dashboard-tabs">
           <button 
             className={`tab ${view === 'setup' ? 'active' : ''}`}
             onClick={() => setView('setup')}
           >
-            <Settings size={20} /> Setup
+            <Settings size={20} /> {t.dashboard.setup}
           </button>
           <button 
             className={`tab ${view === 'comfort' ? 'active' : ''}`}
             onClick={() => setView('comfort')}
           >
-            <Mic size={20} /> Comfort Sounds
+            <Mic size={20} /> {t.dashboard.comfort}
           </button>
           <button 
             className={`tab ${view === 'insights' ? 'active' : ''}`}
             onClick={() => setView('insights')}
           >
-            <BarChart3 size={20} /> Insights
+            <BarChart3 size={20} /> {t.dashboard.insights}
           </button>
           <button 
             className={`tab ${view === 'badges' ? 'active' : ''}`}
             onClick={() => setView('badges')}
           >
-            <Award size={20} /> Badges
+            <Award size={20} /> {t.dashboard.badges}
           </button>
         </div>
       </div>
@@ -104,19 +106,19 @@ export const ParentDashboard: React.FC = () => {
           <h2 className="text-2xl font-semibold mb-4">Child Profile</h2>
           
           <div className="form-group">
-            <label htmlFor="childName">Child's Name</label>
+            <label htmlFor="childName">{t.dashboard.childName}</label>
             <input
               id="childName"
               type="text"
               value={childName}
               onChange={(e) => setChildName(e.target.value)}
-              placeholder="Enter child's name"
+              placeholder={t.dashboard.childName}
               className="input"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="childAge">Age (months)</label>
+            <label htmlFor="childAge">{t.dashboard.childAge}</label>
             <input
               id="childAge"
               type="number"
@@ -127,7 +129,7 @@ export const ParentDashboard: React.FC = () => {
               className="input"
             />
             <p className="text-sm text-gray-600">
-              {Math.floor(childAge / 12)} years, {childAge % 12} months
+              {Math.floor(childAge / 12)} years, {childAge % 12} {t.dashboard.monthsOld}
             </p>
           </div>
 
