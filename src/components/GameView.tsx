@@ -8,6 +8,7 @@ import EchoCharacter from './EchoCharacter';
 import AudioVisualizer from './AudioVisualizer';
 import VolumeMeter from './VolumeMeter';
 import SessionSummary from './SessionSummary';
+import SoundMatchMinigame from './SoundMatchMinigame';
 import DiscoveryPhase from '../phases/DiscoveryPhase';
 import ExpressionPhase from '../phases/ExpressionPhase';
 import CreationPhase from '../phases/CreationPhase';
@@ -23,6 +24,7 @@ export const GameView: React.FC = () => {
   const [showSummary, setShowSummary] = useState(false);
   const [newBadges, setNewBadges] = useState<string[]>([]);
   const [showVisualizer, setShowVisualizer] = useState(false);
+  const [showMinigame, setShowMinigame] = useState(false);
 
   const {
     profile,
@@ -211,6 +213,18 @@ export const GameView: React.FC = () => {
     );
   }
 
+  // Show minigame if active
+  if (showMinigame) {
+    return (
+      <SoundMatchMinigame 
+        onExit={() => {
+          setShowMinigame(false);
+          setEchoMessage("Back to our safari adventure!");
+        }} 
+      />
+    );
+  }
+
   if (!gameState.isActive) {
     return (
       <div className="game-start-screen">
@@ -232,9 +246,17 @@ export const GameView: React.FC = () => {
               <p className="text-xl mb-4">
                 Welcome back, <strong>{profile.childName}</strong>!
               </p>
-              <button onClick={handleStartGame} className="btn-start">
-                Start Adventure!
-              </button>
+              <div className="flex flex-col gap-4">
+                <button onClick={handleStartGame} className="btn-start">
+                  Start Adventure!
+                </button>
+                <button 
+                  onClick={() => setShowMinigame(true)} 
+                  className="btn-secondary px-8 py-4 bg-purple-500 hover:bg-purple-600 text-white rounded-full font-bold text-xl shadow-lg transition-colors"
+                >
+                  🎮 Play Sound Match Game
+                </button>
+              </div>
             </div>
           ) : (
             <div className="setup-prompt">
@@ -279,6 +301,16 @@ export const GameView: React.FC = () => {
             {gameState.childEngagement === 'low' && '💤'}
           </span>
         </div>
+
+        {/* Minigame Quick Access Button */}
+        <button
+          onClick={() => setShowMinigame(true)}
+          className="absolute top-4 right-4 px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-full font-bold shadow-lg transition-colors flex items-center gap-2"
+          title="Play Sound Match Game"
+        >
+          <span>🎮</span>
+          <span className="hidden sm:inline">Minigame</span>
+        </button>
       </div>
 
       <EchoCharacter />
