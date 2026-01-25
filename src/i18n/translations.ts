@@ -24,6 +24,20 @@ export interface Translations {
     benefit4: string;
     benefit5: string;
     benefit6: string;
+    explanationTitle: string;
+    explanationSubtitle: string;
+    explanationStep1Title: string;
+    explanationStep1Desc: string;
+    explanationStep2Title: string;
+    explanationStep2Desc: string;
+    explanationStep3Title: string;
+    explanationStep3Desc: string;
+    explanationForParentsTitle: string;
+    explanationForParents1: string;
+    explanationForParents2: string;
+    explanationSafetyTitle: string;
+    explanationSafety1: string;
+    explanationSafety2: string;
   };
   
   // Dashboard
@@ -160,7 +174,21 @@ export const translations: Record<Language, Translations> = {
       benefit3: 'Encourages vocal confidence and expression',
       benefit4: 'Develops creativity through sound exploration',
       benefit5: 'Provides emotional comfort during transitions',
-      benefit6: '100% privacy-focused with local processing'
+      benefit6: '100% privacy-focused with local processing',
+      explanationTitle: 'How Sound Safari Works',
+      explanationSubtitle: 'A simple, guided flow that turns listening into play and comfort.',
+      explanationStep1Title: 'Listen and Discover',
+      explanationStep1Desc: 'Echo introduces a sound and your child listens for it in the environment.',
+      explanationStep2Title: 'Imitate and Express',
+      explanationStep2Desc: 'Your child mirrors animal sounds to build confidence and speech practice.',
+      explanationStep3Title: 'Create a Rhythm',
+      explanationStep3Desc: 'They tap or clap a rhythm, turning feelings into playful music.',
+      explanationForParentsTitle: 'For Parents',
+      explanationForParents1: 'Set up a profile once, then launch quick sessions anytime.',
+      explanationForParents2: 'Use the dashboard to review progress and earned badges.',
+      explanationSafetyTitle: 'Safety & Privacy',
+      explanationSafety1: 'No accounts needed for kids and no ads or external links.',
+      explanationSafety2: 'Audio stays on device with local processing only.'
     },
     
     dashboard: {
@@ -319,7 +347,21 @@ export const translations: Record<Language, Translations> = {
       benefit3: 'Поощряет голосовую уверенность и самовыражение',
       benefit4: 'Развивает творчество через звуковое исследование',
       benefit5: 'Обеспечивает эмоциональный комфорт в переходные моменты',
-      benefit6: '100% конфиденциальность с локальной обработкой'
+      benefit6: '100% конфиденциальность с локальной обработкой',
+      explanationTitle: 'Как работает Sound Safari',
+      explanationSubtitle: 'Простой и понятный путь, превращающий слушание в игру и поддержку.',
+      explanationStep1Title: 'Слушай и находи',
+      explanationStep1Desc: 'Эхо знакомит со звуком, а ребёнок ищет его вокруг себя.',
+      explanationStep2Title: 'Повторяй и выражайся',
+      explanationStep2Desc: 'Ребёнок имитирует звуки животных, развивая уверенность и речь.',
+      explanationStep3Title: 'Создавай ритм',
+      explanationStep3Desc: 'Хлопки и постукивания превращают эмоции в музыку.',
+      explanationForParentsTitle: 'Для родителей',
+      explanationForParents1: 'Настройте профиль один раз и запускайте сессии в любой момент.',
+      explanationForParents2: 'В панели доступны прогресс и полученные значки.',
+      explanationSafetyTitle: 'Безопасность и приватность',
+      explanationSafety1: 'Детям не нужны аккаунты, нет рекламы и внешних ссылок.',
+      explanationSafety2: 'Обработка звука происходит только на устройстве.'
     },
     
     dashboard: {

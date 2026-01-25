@@ -153,6 +153,102 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+.explanation-section {
+  margin-top: 60px;
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.section-subtitle {
+  text-align: center;
+  color: #777;
+  font-size: 1.1rem;
+  margin: -10px auto 30px;
+  max-width: 720px;
+  line-height: 1.6;
+}
+
+.explanation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.explanation-card {
+  background: #f9fbff;
+  border: 1px solid #e7efff;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: left;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.explanation-step {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4FC3F7 0%, #81C784 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.explanation-card h3 {
+  color: #4FC3F7;
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+}
+
+.explanation-card p {
+  color: #555;
+  line-height: 1.5;
+}
+
+.explanation-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.detail-card {
+  background: #ffffff;
+  border: 1px solid #f0f0f0;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.detail-card h3 {
+  color: #4FC3F7;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+.detail-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.detail-card li {
+  color: #555;
+  margin-bottom: 10px;
+  padding-left: 18px;
+  position: relative;
+}
+
+.detail-card li::before {
+  content: '•';
+  color: #81C784;
+  position: absolute;
+  left: 0;
+}
+
 .section-title {
   font-size: 2rem;
   color: #4FC3F7;

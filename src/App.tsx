@@ -131,6 +131,46 @@ function App() {
                 <li>🔒 {t.home.benefit6}</li>
               </ul>
             </div>
+
+            <div className="explanation-section">
+              <h2 className="section-title">{t.home.explanationTitle}</h2>
+              <p className="section-subtitle">{t.home.explanationSubtitle}</p>
+
+              <div className="explanation-grid">
+                <div className="explanation-card">
+                  <div className="explanation-step">1</div>
+                  <h3>{t.home.explanationStep1Title}</h3>
+                  <p>{t.home.explanationStep1Desc}</p>
+                </div>
+                <div className="explanation-card">
+                  <div className="explanation-step">2</div>
+                  <h3>{t.home.explanationStep2Title}</h3>
+                  <p>{t.home.explanationStep2Desc}</p>
+                </div>
+                <div className="explanation-card">
+                  <div className="explanation-step">3</div>
+                  <h3>{t.home.explanationStep3Title}</h3>
+                  <p>{t.home.explanationStep3Desc}</p>
+                </div>
+              </div>
+
+              <div className="explanation-details">
+                <div className="detail-card">
+                  <h3>{t.home.explanationForParentsTitle}</h3>
+                  <ul>
+                    <li>{t.home.explanationForParents1}</li>
+                    <li>{t.home.explanationForParents2}</li>
+                  </ul>
+                </div>
+                <div className="detail-card">
+                  <h3>{t.home.explanationSafetyTitle}</h3>
+                  <ul>
+                    <li>{t.home.explanationSafety1}</li>
+                    <li>{t.home.explanationSafety2}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
