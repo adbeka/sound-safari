@@ -1,8 +1,9 @@
 // Phase 2: Expression - "Jungle Choir Carnival"
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { ANIMAL_SOUNDS, ENCOURAGEMENTS } from '../data/sounds';
 import { useAppStore } from '../store/useAppStore';
 import { audioEngine } from '../engine/AudioEngine';
+import { filterByDifficulty } from '../utils/difficulty';
 import type { SoundItem } from '../types';
 
 interface ExpressionPhaseProps {
@@ -23,8 +24,17 @@ export const ExpressionPhase: React.FC<ExpressionPhaseProps> = ({ onComplete }) 
     incrementScore,
     incrementEncouragement,
     addSoundImitated,
-    setActivity
+    setActivity,
+    difficultyLevel,
+    recordPerformance,
+    setCaption,
+    clearCaption
   } = useAppStore();
+
+  const availableAnimals = useMemo(
+    () => filterByDifficulty(ANIMAL_SOUNDS, difficultyLevel),
+    [difficultyLevel]
+  );
 
   useEffect(() => {
     setActivity('Jungle Choir Carnival');
@@ -48,20 +58,22 @@ export const ExpressionPhase: React.FC<ExpressionPhaseProps> = ({ onComplete }) 
   };
 
   const presentAnimal = (index: number) => {
-    if (index >= ANIMAL_SOUNDS.length) {
+    if (index >= availableAnimals.length) {
       completePhase();
       return;
     }
 
-    const animal = ANIMAL_SOUNDS[index];
+    const animal = availableAnimals[index];
     setCurrentAnimal(animal);
     setIsChildTurn(false);
     
     setEchoMessage(`Listen to Echo's ${animal.displayName}!`);
+    setCaption(`Echo makes: ${animal.displayName}`);
     
     // Echo demonstrates the sound
     setTimeout(() => {
       setEchoMessage(`${animal.description}`);
+      setCaption(`${animal.displayName}: ${animal.description}`);
       
       setTimeout(() => {
         promptChildImitation(animal);
@@ -73,6 +85,7 @@ export const ExpressionPhase: React.FC<ExpressionPhaseProps> = ({ onComplete }) 
     setIsChildTurn(true);
     setEchoMessage(`Now YOU try! Can you sound like a ${animal.displayName}?`);
     setEchoListening(true);
+    setCaption(`Your turn: try ${animal.displayName}`);
     
     // Start listening for child's voice
     startListeningForImitation(animal);
@@ -107,6 +120,7 @@ export const ExpressionPhase: React.FC<ExpressionPhaseProps> = ({ onComplete }) 
     setImitated([...imitated, animal.id]);
     addSoundImitated(animal.id);
     incrementScore();
+    recordPerformance(true);
     
     const encouragement = ENCOURAGEMENTS[Math.floor(Math.random() * ENCOURAGEMENTS.length)];
     setEchoMessage(`${encouragement} That was a wonderful ${animal.displayName}!`);
@@ -123,6 +137,7 @@ export const ExpressionPhase: React.FC<ExpressionPhaseProps> = ({ onComplete }) 
 
   const handleNoAttempt = (animal: SoundItem) => {
     setEchoListening(false);
+    recordPerformance(false);
     
     setEchoMessage("That's okay! Sometimes we need time to think. Let's try together!");
     
@@ -140,6 +155,7 @@ export const ExpressionPhase: React.FC<ExpressionPhaseProps> = ({ onComplete }) 
   const completePhase = () => {
     setEchoMessage(`Amazing! You made ${imitated.length} different animal sounds! You're a superstar!`);
     setEchoMood('celebrating');
+    clearCaption();
     
     setTimeout(() => {
       setEchoMessage("Ready to make music?");
@@ -155,7 +171,7 @@ export const ExpressionPhase: React.FC<ExpressionPhaseProps> = ({ onComplete }) 
       <div className="phase-header">
         <h2 className="text-3xl font-bold text-safari-orange">🐘 Jungle Choir Carnival</h2>
         <div className="imitated-count">
-          <span className="text-xl">Animals Imitated: {imitated.length}/{ANIMAL_SOUNDS.length}</span>
+          <span className="text-xl">Animals Imitated: {imitated.length}/{availableAnimals.length}</span>
         </div>
       </div>
 
@@ -180,7 +196,7 @@ export const ExpressionPhase: React.FC<ExpressionPhaseProps> = ({ onComplete }) 
 
       <div className="imitated-animals-grid">
         {imitated.map((animalId) => {
-          const animal = ANIMAL_SOUNDS.find(s => s.id === animalId);
+          const animal = availableAnimals.find(s => s.id === animalId) || ANIMAL_SOUNDS.find(s => s.id === animalId);
           return (
             <div key={animalId} className="imitated-badge">
               ✓ {animal?.displayName}

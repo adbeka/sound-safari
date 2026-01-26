@@ -1,5 +1,5 @@
 // Main App Component
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ParentDashboard from './components/ParentDashboard';
 import GameView from './components/GameView';
 import { useAppStore } from './store/useAppStore';
@@ -9,8 +9,19 @@ import './App.css';
 
 function App() {
   const [view, setView] = useState<'home' | 'dashboard' | 'game'>('home');
-  const { profile } = useAppStore();
+  const { profile, generateDailyChallenge } = useAppStore();
   const { t, language, setLanguage } = useLanguage();
+
+  useEffect(() => {
+    generateDailyChallenge();
+  }, [generateDailyChallenge]);
+
+  useEffect(() => {
+    const accessibility = profile?.preferences.accessibility;
+    const body = document.body;
+    body.classList.toggle('colorblind-mode', Boolean(accessibility?.colorBlindMode));
+    body.classList.toggle('reduced-motion', Boolean(accessibility?.reducedMotion));
+  }, [profile?.preferences.accessibility]);
 
   return (
     <div className="app">

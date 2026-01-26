@@ -23,7 +23,7 @@ const MINIGAME_SOUNDS = [
 ];
 
 export const SoundMatchMinigame: React.FC<{ onExit: () => void }> = ({ onExit }) => {
-  const { incrementScore, setEchoMessage } = useAppStore();
+  const { incrementScore, setEchoMessage, setCaption, clearCaption, profile, caption } = useAppStore();
   
   const [cards, setCards] = useState<SoundCard[]>([]);
   const [flippedCards, setFlippedCards] = useState<string[]>([]);
@@ -35,6 +35,9 @@ export const SoundMatchMinigame: React.FC<{ onExit: () => void }> = ({ onExit })
 
   useEffect(() => {
     initializeGame();
+    return () => {
+      clearCaption();
+    };
   }, []);
 
   useEffect(() => {
@@ -100,6 +103,10 @@ export const SoundMatchMinigame: React.FC<{ onExit: () => void }> = ({ onExit })
     
     oscillator.start();
     oscillator.stop(audioContext.currentTime + 0.3);
+    const sound = MINIGAME_SOUNDS.find((entry) => entry.soundId === soundId);
+    if (sound) {
+      setCaption(`Sound: ${sound.displayName}`);
+    }
   };
 
   const handleCardClick = (cardId: string) => {
@@ -179,6 +186,11 @@ export const SoundMatchMinigame: React.FC<{ onExit: () => void }> = ({ onExit })
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-400 via-pink-400 to-yellow-300 p-6">
+      {profile?.preferences.accessibility.captions && caption && (
+        <div className="caption-banner" aria-live="polite">
+          <span className="caption-label">Caption:</span> {caption}
+        </div>
+      )}
       {/* Header */}
       <div className="max-w-4xl mx-auto mb-8">
         <div className="flex items-center justify-between mb-4">

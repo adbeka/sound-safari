@@ -2,6 +2,9 @@
 
 export type Phase = 'discovery' | 'expression' | 'creation';
 
+export type DifficultyLevel = 'easy' | 'medium' | 'hard';
+export type DifficultyMode = 'fixed' | 'adaptive';
+
 export type EmotionalState = 'happy' | 'neutral' | 'distressed' | 'excited' | 'calm';
 
 export interface SoundItem {
@@ -11,7 +14,7 @@ export interface SoundItem {
   category: 'animal' | 'household' | 'nature' | 'musical';
   audioUrl?: string;
   description: string;
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty: DifficultyLevel;
 }
 
 export interface ComfortSound {
@@ -41,6 +44,34 @@ export interface SessionData {
   totalDuration: number;
 }
 
+export interface AccessibilitySettings {
+  colorBlindMode: boolean;
+  captions: boolean;
+  reducedMotion: boolean;
+}
+
+export interface DailyChallenge {
+  id: string;
+  title: string;
+  description: string;
+  type: 'discover' | 'imitate' | 'rhythm';
+  target: number;
+  progress: number;
+  reward: string;
+  rewardType: 'badge' | 'sticker' | 'environment' | 'bonus';
+  dateKey: string;
+  completed: boolean;
+  completedAt?: Date;
+}
+
+export interface Environment {
+  id: string;
+  name: string;
+  emoji: string;
+  description: string;
+  unlockAtSessions: number;
+}
+
 export interface UserProfile {
   childName: string;
   age: number; // in months
@@ -52,12 +83,18 @@ export interface UserProfile {
     earnedAt: Date;
     sessionId: string;
   }>;
+  progression: {
+    currentEnvironmentId: string;
+    unlockedEnvironments: string[];
+  };
   preferences: {
     maxSessionDuration: number; // in minutes
     autoComfortEnabled: boolean;
     volumeLevel: number;
     voiceSpeed: 'slow' | 'normal' | 'fast';
-    difficulty: 'easy' | 'medium' | 'hard';
+    difficulty: DifficultyLevel;
+    difficultyMode: DifficultyMode;
+    accessibility: AccessibilitySettings;
   };
 }
 

@@ -394,6 +394,261 @@ body {
   font-weight: bold;
 }
 
+/* Daily Challenge & Progression */
+.start-extras {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.start-difficulty {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: #f3f7ff;
+  border-radius: 999px;
+  font-weight: 600;
+  color: #3b5bdb;
+  margin: 0 auto;
+}
+
+.daily-challenge-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-align: left;
+}
+
+.daily-challenge-card.completed {
+  border: 2px solid #81c784;
+}
+
+.daily-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.daily-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #4FC3F7;
+}
+
+.daily-reward {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.daily-description {
+  margin: 8px 0 12px;
+  color: #4b5563;
+}
+
+.daily-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.daily-progress-bar {
+  flex: 1;
+  height: 10px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  overflow: hidden;
+}
+
+.daily-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4FC3F7 0%, #81C784 100%);
+  transition: width 0.3s ease;
+}
+
+.daily-progress-text {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.daily-complete {
+  margin-top: 10px;
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.progression-map {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.progression-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #4FC3F7;
+  margin-bottom: 6px;
+}
+
+.progression-subtitle {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin-bottom: 16px;
+}
+
+.progression-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.environment-card {
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 16px;
+  text-align: left;
+  background: #f8fafc;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.environment-card.unlocked:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+}
+
+.environment-card.locked {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.environment-card.active {
+  border-color: #4FC3F7;
+  background: #eef7ff;
+}
+
+.environment-emoji {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.environment-info h4 {
+  margin: 0 0 6px;
+  color: #1f2937;
+  font-size: 1.05rem;
+}
+
+.environment-info p {
+  color: #6b7280;
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+}
+
+.environment-lock,
+.environment-active {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.environment-active {
+  color: #2563eb;
+}
+
+/* Captions */
+.caption-banner {
+  background: #111827;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 999px;
+  margin: 0 auto 16px;
+  width: fit-content;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.caption-label {
+  color: #fbbf24;
+}
+
+/* Difficulty & Environment Indicators */
+.difficulty-indicator,
+.environment-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f9fafb;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.difficulty-pill {
+  padding: 2px 8px;
+  border-radius: 999px;
+  text-transform: capitalize;
+  font-size: 0.85rem;
+}
+
+.difficulty-pill.easy {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.difficulty-pill.medium {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.difficulty-pill.hard {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.environment-indicator .environment-emoji {
+  font-size: 1.2rem;
+}
+
+/* Accessibility Controls */
+.accessibility-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+/* Color-blind mode adjustments */
+body.colorblind-mode {
+  background: linear-gradient(135deg, #f0f4ff 0%, #fff7e6 100%);
+}
+
+body.colorblind-mode .btn-cta.primary {
+  background: linear-gradient(135deg, #1f6feb 0%, #ff9f1c 100%);
+  box-shadow: 0 4px 15px rgba(31, 111, 235, 0.4);
+}
+
+body.colorblind-mode .feature-card h3,
+body.colorblind-mode .section-title,
+body.colorblind-mode .daily-title,
+body.colorblind-mode .progression-title {
+  color: #1f6feb;
+}
+
+/* Reduced motion */
+body.reduced-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
 /* Game View */
 .game-view {
   background: white;

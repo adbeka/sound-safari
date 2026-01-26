@@ -1,5 +1,5 @@
 // Sound Library - Curated sounds for each phase
-import type { SoundItem } from '../types';
+import type { SoundItem, DifficultyLevel } from '../types';
 
 export const DISCOVERY_SOUNDS: SoundItem[] = [
   {
@@ -199,7 +199,15 @@ export const ANIMAL_SOUNDS: SoundItem[] = [
   }
 ];
 
-export const RHYTHM_PATTERNS = [
+export interface RhythmPattern {
+  id: string;
+  name: string;
+  pattern: number[];
+  difficulty: DifficultyLevel;
+  description: string;
+}
+
+export const RHYTHM_PATTERNS: RhythmPattern[] = [
   {
     id: 'simple-beat',
     name: 'Simple Beat',

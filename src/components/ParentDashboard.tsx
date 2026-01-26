@@ -8,7 +8,7 @@ import type { ComfortSound } from '../types';
 import { Settings, Mic, Play, Trash2, BarChart3, Award } from 'lucide-react';
 
 export const ParentDashboard: React.FC = () => {
-  const { profile, setProfile, addComfortSound } = useAppStore();
+  const { profile, setProfile, addComfortSound, updatePreferences, updateAccessibility } = useAppStore();
   const { t } = useLanguage();
   const [childName, setChildName] = useState(profile?.childName || '');
   const [childAge, setChildAge] = useState(profile?.age || 36);
@@ -26,12 +26,22 @@ export const ParentDashboard: React.FC = () => {
       favoriteAnimals: [],
       sessionHistory: [],
       achievements: [],
+      progression: {
+        currentEnvironmentId: 'savanna',
+        unlockedEnvironments: ['savanna']
+      },
       preferences: {
         maxSessionDuration: 15,
         autoComfortEnabled: true,
         volumeLevel: 0.7,
         voiceSpeed: 'normal',
-        difficulty: 'easy'
+        difficulty: 'easy',
+        difficultyMode: 'adaptive',
+        accessibility: {
+          colorBlindMode: false,
+          captions: true,
+          reducedMotion: false
+        }
       }
     };
 
@@ -141,13 +151,7 @@ export const ParentDashboard: React.FC = () => {
               value={profile?.preferences.maxSessionDuration || 15}
               onChange={(e) => {
                 if (profile) {
-                  setProfile({
-                    ...profile,
-                    preferences: {
-                      ...profile.preferences,
-                      maxSessionDuration: parseInt(e.target.value)
-                    }
-                  });
+                  updatePreferences({ maxSessionDuration: parseInt(e.target.value) });
                 }
               }}
               min={5}
@@ -163,19 +167,95 @@ export const ParentDashboard: React.FC = () => {
                 checked={profile?.preferences.autoComfortEnabled ?? true}
                 onChange={(e) => {
                   if (profile) {
-                    setProfile({
-                      ...profile,
-                      preferences: {
-                        ...profile.preferences,
-                        autoComfortEnabled: e.target.checked
-                      }
-                    });
+                    updatePreferences({ autoComfortEnabled: e.target.checked });
                   }
                 }}
                 className="checkbox"
               />
               <span className="ml-2">Automatically play comfort sounds when distress detected</span>
             </label>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="difficultyMode">Difficulty Mode</label>
+            <select
+              id="difficultyMode"
+              className="input"
+              value={profile?.preferences.difficultyMode || 'adaptive'}
+              onChange={(e) => {
+                if (profile) {
+                  updatePreferences({ difficultyMode: e.target.value as 'fixed' | 'adaptive' });
+                }
+              }}
+            >
+              <option value="adaptive">Adaptive (recommended)</option>
+              <option value="fixed">Fixed</option>
+            </select>
+          </div>
+
+          {profile?.preferences.difficultyMode === 'fixed' && (
+            <div className="form-group">
+              <label htmlFor="difficulty">Difficulty Level</label>
+              <select
+                id="difficulty"
+                className="input"
+                value={profile?.preferences.difficulty || 'easy'}
+                onChange={(e) => {
+                  if (profile) {
+                    updatePreferences({ difficulty: e.target.value as 'easy' | 'medium' | 'hard' });
+                  }
+                }}
+              >
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+            </div>
+          )}
+
+          <div className="form-group">
+            <label>Accessibility</label>
+            <div className="accessibility-options">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={profile?.preferences.accessibility.colorBlindMode ?? false}
+                  onChange={(e) => {
+                    if (profile) {
+                      updateAccessibility({ colorBlindMode: e.target.checked });
+                    }
+                  }}
+                  className="checkbox"
+                />
+                <span className="ml-2">Color-blind friendly mode</span>
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={profile?.preferences.accessibility.captions ?? true}
+                  onChange={(e) => {
+                    if (profile) {
+                      updateAccessibility({ captions: e.target.checked });
+                    }
+                  }}
+                  className="checkbox"
+                />
+                <span className="ml-2">Show captions for sounds</span>
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={profile?.preferences.accessibility.reducedMotion ?? false}
+                  onChange={(e) => {
+                    if (profile) {
+                      updateAccessibility({ reducedMotion: e.target.checked });
+                    }
+                  }}
+                  className="checkbox"
+                />
+                <span className="ml-2">Reduced motion</span>
+              </label>
+            </div>
           </div>
 
           <button onClick={handleSaveProfile} className="btn-primary">

@@ -1,9 +1,11 @@
 // Echo Character - The friendly AI companion
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { useAppStore } from '../store/useAppStore';
 
 export const EchoCharacter: React.FC = () => {
-  const { echoState } = useAppStore();
+  const { echoState, profile } = useAppStore();
+  const prefersReducedMotion = useReducedMotion();
+  const reducedMotion = prefersReducedMotion || profile?.preferences.accessibility.reducedMotion;
 
   const getMoodEmoji = () => {
     switch (echoState.mood) {
@@ -24,11 +26,11 @@ export const EchoCharacter: React.FC = () => {
       <motion.div
         className="echo-character"
         animate={{
-          scale: echoState.isListening ? [1, 1.05, 1] : 1,
+          scale: echoState.isListening && !reducedMotion ? [1, 1.05, 1] : 1,
         }}
         transition={{
-          duration: 1.5,
-          repeat: echoState.isListening ? Infinity : 0,
+          duration: reducedMotion ? 0 : 1.5,
+          repeat: echoState.isListening && !reducedMotion ? Infinity : 0,
           ease: "easeInOut"
         }}
       >
@@ -37,11 +39,11 @@ export const EchoCharacter: React.FC = () => {
           <motion.div
             className="echo-face"
             animate={{
-              rotate: echoState.mood === 'excited' ? [-5, 5, -5] : 0
+              rotate: echoState.mood === 'excited' && !reducedMotion ? [-5, 5, -5] : 0
             }}
             transition={{
-              duration: 0.5,
-              repeat: echoState.mood === 'excited' ? Infinity : 0
+              duration: reducedMotion ? 0 : 0.5,
+              repeat: echoState.mood === 'excited' && !reducedMotion ? Infinity : 0
             }}
           >
             <span className="text-8xl">{getMoodEmoji()}</span>
@@ -54,11 +56,11 @@ export const EchoCharacter: React.FC = () => {
               filter: echoState.earGlow 
                 ? 'drop-shadow(0 0 20px rgba(255, 213, 79, 0.8))'
                 : 'none',
-              scale: echoState.isListening ? [1, 1.2, 1] : 1
+              scale: echoState.isListening && !reducedMotion ? [1, 1.2, 1] : 1
             }}
             transition={{
-              duration: 1,
-              repeat: echoState.isListening ? Infinity : 0
+              duration: reducedMotion ? 0 : 1,
+              repeat: echoState.isListening && !reducedMotion ? Infinity : 0
             }}
           >
             <div 
@@ -75,12 +77,12 @@ export const EchoCharacter: React.FC = () => {
               filter: echoState.earGlow 
                 ? 'drop-shadow(0 0 20px rgba(255, 213, 79, 0.8))'
                 : 'none',
-              scale: echoState.isListening ? [1, 1.2, 1] : 1
+              scale: echoState.isListening && !reducedMotion ? [1, 1.2, 1] : 1
             }}
             transition={{
-              duration: 1,
-              repeat: echoState.isListening ? Infinity : 0,
-              delay: 0.2
+              duration: reducedMotion ? 0 : 1,
+              repeat: echoState.isListening && !reducedMotion ? Infinity : 0,
+              delay: reducedMotion ? 0 : 0.2
             }}
           >
             <div 
@@ -96,10 +98,10 @@ export const EchoCharacter: React.FC = () => {
         {echoState.message && (
           <motion.div
             className="echo-message-bubble"
-            initial={{ opacity: 0, y: 20 }}
+            initial={reducedMotion ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
+            exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -20 }}
+            transition={{ duration: reducedMotion ? 0 : 0.3 }}
           >
             <p className="echo-message-text">{echoState.message}</p>
           </motion.div>
@@ -110,7 +112,7 @@ export const EchoCharacter: React.FC = () => {
       {echoState.isListening && (
         <motion.div
           className="listening-indicator"
-          initial={{ opacity: 0 }}
+          initial={reducedMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >

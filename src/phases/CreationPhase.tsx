@@ -1,8 +1,9 @@
 // Phase 3: Creation - "Family Rhythm Band"
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { RHYTHM_PATTERNS, ENCOURAGEMENTS } from '../data/sounds';
 import { useAppStore } from '../store/useAppStore';
 import { audioEngine } from '../engine/AudioEngine';
+import { filterByDifficulty } from '../utils/difficulty';
 
 interface CreationPhaseProps {
   onComplete: () => void;
@@ -23,8 +24,17 @@ export const CreationPhase: React.FC<CreationPhaseProps> = ({ onComplete }) => {
     incrementScore,
     incrementEncouragement,
     incrementRhythmsCreated,
-    setActivity
+    setActivity,
+    difficultyLevel,
+    recordPerformance,
+    setCaption,
+    clearCaption
   } = useAppStore();
+
+  const availablePatterns = useMemo(
+    () => filterByDifficulty(RHYTHM_PATTERNS, difficultyLevel),
+    [difficultyLevel]
+  );
 
   useEffect(() => {
     setActivity('Family Rhythm Band');
@@ -48,16 +58,17 @@ export const CreationPhase: React.FC<CreationPhaseProps> = ({ onComplete }) => {
   };
 
   const presentPattern = (index: number) => {
-    if (index >= RHYTHM_PATTERNS.length) {
+    if (index >= availablePatterns.length) {
       startFreePlay();
       return;
     }
 
-    const pattern = RHYTHM_PATTERNS[index];
+    const pattern = availablePatterns[index];
     setCurrentPattern(index);
     setIsChildTurn(false);
     
     setEchoMessage(`Listen to this beat: ${pattern.description}`);
+    setCaption(`Echo plays: ${pattern.name}`);
     
     // Play the rhythm pattern
     playPattern(pattern.pattern).then(() => {
@@ -83,6 +94,7 @@ export const CreationPhase: React.FC<CreationPhaseProps> = ({ onComplete }) => {
     setIsChildTurn(true);
     setEchoMessage("Now YOU make the beat! Clap along!");
     setEchoListening(true);
+    setCaption(`Your turn: ${pattern.name}`);
     
     // Listen for child's rhythm
     startListeningForRhythm(pattern);
@@ -124,6 +136,7 @@ export const CreationPhase: React.FC<CreationPhaseProps> = ({ onComplete }) => {
     setRhythmsCompleted(rhythmsCompleted + 1);
     incrementRhythmsCreated();
     incrementScore();
+    recordPerformance(true);
     setBeatCount(0);
     
     const encouragement = ENCOURAGEMENTS[Math.floor(Math.random() * ENCOURAGEMENTS.length)];
@@ -142,6 +155,7 @@ export const CreationPhase: React.FC<CreationPhaseProps> = ({ onComplete }) => {
     setEchoListening(false);
     setRhythmsCompleted(rhythmsCompleted + 1);
     incrementRhythmsCreated();
+    recordPerformance(false);
     setBeatCount(0);
     
     setEchoMessage("Great effort! Every beat you make is special!");
@@ -156,6 +170,7 @@ export const CreationPhase: React.FC<CreationPhaseProps> = ({ onComplete }) => {
     setEchoMessage("Now make ANY beat you want! You're the band leader!");
     setEchoMood('celebrating');
     setEchoListening(true);
+    setCaption('Free play: make any rhythm you like!');
     
     // Free play mode - just celebrate any sound
     listeningInterval.current = setInterval(() => {
@@ -183,6 +198,7 @@ export const CreationPhase: React.FC<CreationPhaseProps> = ({ onComplete }) => {
     setEchoListening(false);
     setEchoMessage("What an amazing musical adventure! You're a true rhythm master!");
     setEchoMood('celebrating');
+    clearCaption();
     
     setTimeout(() => {
       onComplete();
@@ -200,15 +216,15 @@ export const CreationPhase: React.FC<CreationPhaseProps> = ({ onComplete }) => {
         </div>
       </div>
 
-      {!isFreePlay && currentPattern < RHYTHM_PATTERNS.length && (
+      {!isFreePlay && currentPattern < availablePatterns.length && (
         <div className="current-rhythm-card">
           <div className={`rhythm-visual ${isChildTurn ? 'your-turn' : ''}`}>
             <span className="text-6xl">
               {isChildTurn ? '👏' : '🎵'}
             </span>
           </div>
-          <h3 className="text-3xl mt-4">{RHYTHM_PATTERNS[currentPattern].name}</h3>
-          <p className="text-xl text-gray-700">{RHYTHM_PATTERNS[currentPattern].description}</p>
+          <h3 className="text-3xl mt-4">{availablePatterns[currentPattern].name}</h3>
+          <p className="text-xl text-gray-700">{availablePatterns[currentPattern].description}</p>
           
           {isChildTurn && (
             <div className="your-turn-indicator">
@@ -231,7 +247,7 @@ export const CreationPhase: React.FC<CreationPhaseProps> = ({ onComplete }) => {
       )}
 
       <div className="rhythm-progress">
-        {RHYTHM_PATTERNS.map((pattern, index) => (
+        {availablePatterns.map((pattern, index) => (
           <div 
             key={pattern.id} 
             className={`rhythm-badge ${index < rhythmsCompleted ? 'completed' : ''}`}

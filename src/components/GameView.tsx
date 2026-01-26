@@ -1,6 +1,6 @@
 // Main Game Component - Orchestrates the three phases
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useAppStore } from '../store/useAppStore';
 import { audioEngine } from '../engine/AudioEngine';
 import { EmotionDetector } from '../engine/EmotionDetector';
@@ -9,10 +9,13 @@ import AudioVisualizer from './AudioVisualizer';
 import VolumeMeter from './VolumeMeter';
 import SessionSummary from './SessionSummary';
 import SoundMatchMinigame from './SoundMatchMinigame';
+import DailyChallengeCard from './DailyChallengeCard';
+import ProgressionMap from './ProgressionMap';
 import DiscoveryPhase from '../phases/DiscoveryPhase';
 import ExpressionPhase from '../phases/ExpressionPhase';
 import CreationPhase from '../phases/CreationPhase';
 import { AVAILABLE_BADGES, checkBadgeEarned } from '../types/achievements';
+import { ENVIRONMENTS } from '../data/progression';
 import type { Phase } from '../types';
 
 const emotionDetector = new EmotionDetector(audioEngine);
@@ -39,8 +42,19 @@ export const GameView: React.FC = () => {
     currentSession,
     recordEmotionalState,
     recordComfortSoundPlayed,
-    setEngagement
+    setEngagement,
+    difficultyLevel,
+    caption
   } = useAppStore();
+
+  const prefersReducedMotion = useReducedMotion();
+  const accessibility = profile?.preferences.accessibility || {
+    colorBlindMode: false,
+    captions: true,
+    reducedMotion: false
+  };
+  const reduceMotion = prefersReducedMotion || accessibility.reducedMotion;
+  const currentEnvironment = ENVIRONMENTS.find(env => env.id === profile?.progression.currentEnvironmentId);
 
   useEffect(() => {
     initializeGame();
@@ -229,8 +243,8 @@ export const GameView: React.FC = () => {
     return (
       <div className="game-start-screen">
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={reduceMotion ? false : { opacity: 0, scale: 0.9 }}
+          animate={reduceMotion ? { opacity: 1, scale: 1 } : { opacity: 1, scale: 1 }}
           className="start-card"
         >
           <h1 className="text-5xl font-bold text-safari-blue mb-4">
@@ -265,6 +279,15 @@ export const GameView: React.FC = () => {
               </p>
             </div>
           )}
+
+          <div className="start-extras">
+            <div className="start-difficulty">
+              <span className="label">Adaptive Difficulty:</span>
+              <span className="value">{difficultyLevel.toUpperCase()}</span>
+            </div>
+            <DailyChallengeCard />
+            <ProgressionMap />
+          </div>
         </motion.div>
       </div>
     );
@@ -272,6 +295,11 @@ export const GameView: React.FC = () => {
 
   return (
     <div className="game-view">
+      {accessibility.captions && caption && (
+        <div className="caption-banner" aria-live="polite">
+          <span className="caption-label">Caption:</span> {caption}
+        </div>
+      )}
       <AudioVisualizer 
         audioEngine={audioEngine}
         isActive={showVisualizer && gameState.isActive}
@@ -302,6 +330,18 @@ export const GameView: React.FC = () => {
           </span>
         </div>
 
+        <div className="difficulty-indicator">
+          <span className="difficulty-label">Difficulty</span>
+          <span className={`difficulty-pill ${difficultyLevel}`}>{difficultyLevel}</span>
+        </div>
+
+        {currentEnvironment && (
+          <div className="environment-indicator">
+            <span className="environment-emoji">{currentEnvironment.emoji}</span>
+            <span className="environment-name">{currentEnvironment.name}</span>
+          </div>
+        )}
+
         {/* Minigame Quick Access Button */}
         <button
           onClick={() => setShowMinigame(true)}
@@ -318,9 +358,9 @@ export const GameView: React.FC = () => {
       <AnimatePresence mode="wait">
         {showComfortMessage && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={reduceMotion ? false : { opacity: 0 }}
+            animate={reduceMotion ? { opacity: 1 } : { opacity: 1 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0 }}
             className="comfort-overlay"
           >
             <div className="comfort-message">
@@ -336,9 +376,9 @@ export const GameView: React.FC = () => {
           {currentPhase === 'discovery' && (
             <motion.div
               key="discovery"
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
+              initial={reduceMotion ? false : { opacity: 0, x: 100 }}
+              animate={reduceMotion ? { opacity: 1, x: 0 } : { opacity: 1, x: 0 }}
+              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -100 }}
             >
               <DiscoveryPhase onComplete={() => handlePhaseComplete('discovery')} />
             </motion.div>
@@ -347,9 +387,9 @@ export const GameView: React.FC = () => {
           {currentPhase === 'expression' && (
             <motion.div
               key="expression"
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
+              initial={reduceMotion ? false : { opacity: 0, x: 100 }}
+              animate={reduceMotion ? { opacity: 1, x: 0 } : { opacity: 1, x: 0 }}
+              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -100 }}
             >
               <ExpressionPhase onComplete={() => handlePhaseComplete('expression')} />
             </motion.div>
@@ -358,9 +398,9 @@ export const GameView: React.FC = () => {
           {currentPhase === 'creation' && (
             <motion.div
               key="creation"
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
+              initial={reduceMotion ? false : { opacity: 0, x: 100 }}
+              animate={reduceMotion ? { opacity: 1, x: 0 } : { opacity: 1, x: 0 }}
+              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -100 }}
             >
               <CreationPhase onComplete={() => handlePhaseComplete('creation')} />
             </motion.div>
