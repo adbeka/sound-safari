@@ -192,12 +192,22 @@ function App() {
               <div className="kid-video-card">
                 <div className="kid-video-frame">
                   <iframe
-                    src={`https://www.youtube.com/embed/${kidsVideoId}`}
+                    src={`https://www.youtube-nocookie.com/embed/${kidsVideoId}?rel=0&modestbranding=1&playsinline=1`}
                     title="Sound Safari Kids Video"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
                     loading="lazy"
                   />
+                </div>
+                <div className="kid-video-actions">
+                  <a
+                    className="kid-video-link"
+                    href={`https://youtu.be/${kidsVideoId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Open on YouTube
+                  </a>
                 </div>
               </div>
             </div>
