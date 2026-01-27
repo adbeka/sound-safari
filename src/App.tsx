@@ -11,6 +11,7 @@ function App() {
   const [view, setView] = useState<'home' | 'dashboard' | 'game'>('home');
   const { profile, generateDailyChallenge } = useAppStore();
   const { t, language, setLanguage } = useLanguage();
+  const kidsVideoId = 'dRAEdZSaJA8';
 
   useEffect(() => {
     generateDailyChallenge();
@@ -179,6 +180,24 @@ function App() {
                     <li>{t.home.explanationSafety1}</li>
                     <li>{t.home.explanationSafety2}</li>
                   </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="kid-video-section">
+              <h2 className="section-title">Kids Watch Corner</h2>
+              <p className="section-subtitle">
+                Scroll down and tap play to enjoy a friendly Sound Safari video.
+              </p>
+              <div className="kid-video-card">
+                <div className="kid-video-frame">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${kidsVideoId}`}
+                    title="Sound Safari Kids Video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    loading="lazy"
+                  />
                 </div>
               </div>
             </div>
